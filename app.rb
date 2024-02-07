@@ -6,4 +6,5 @@ require 'bcrypt'
 
 
 get ('/') do 
+    slim(:index)
 end
