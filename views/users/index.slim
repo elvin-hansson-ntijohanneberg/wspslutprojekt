@@ -1,10 +1,13 @@
-h2 Login 
+h2 Inloggning
 form action="users/login" method="POST"
-    input [type="text" name="username" placeholder="Enter username" required]
-    input [type="password" name="password" placeholder="Enter password" required]
-    input type="submit" value="Log in"
+    - if email != ''
+        input [type="text" name="email" placeholder="Ange e-post" value=email required]
+    - else
+        input [type="text" name="email" placeholder="Ange e-post" required]
+    input [type="password" name="password" placeholder="Ange lösenord" required]
+    input type="submit" value="Logga in"
     div 
-        a href="/users/new" Register new account
+        a href="/users/new" Registrera nytt konto
     
     
     

@@ -1,0 +1,45 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.container {
+  padding: 20px;
+}
+.appbar {
+  background-color: #333;
+  color: #fff;
+  padding: 10px 20px;
+}
+.appbar-content {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+}
+.appbar-logo {
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 24px;
+  max-height: 35px;
+  max-width: 35px;
+  height: auto;
+  width: auto;
+}
+.appbar-nav a {
+  color: #fff;
+  text-decoration: none;
+  margin-left: 20px;
+}
+.appbar-nav a:hover {
+  color: #f8fafc;
+  text-decoration: underline;
+}
+
+#delete-button {
+    position: relative;
+    bottom: 100px;
+}

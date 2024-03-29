@@ -1,3 +1,9 @@
-h1 
+h1 SXK - Problemlösning
 div 
-    img src="img/sxk-logo-w.png" alt="logo"
+    - if user
+        / Visa saker för inloggade
+        h3 Välkommen tillbaka #{user["name"]}
+       
+    - else
+        /Visa saker om användaren inte är inloggad
+        h3 Välkommen!

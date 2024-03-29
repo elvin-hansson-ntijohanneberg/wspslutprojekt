@@ -3,9 +3,28 @@ html lang = "en"
     head 
         meta charset="UTF-8"
         meta name="viewport" content="width=device-width, initial-scale=1.0"
-        link rel="stylesheet" href="style.css"
-        title Document
+        link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic"
+        link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css"
+        link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css"
+        link rel="stylesheet" href="/css/style.css"
+        script src="https://kit.fontawesome.com/b5fd20235e.js" crossorigin="anonymous"
+
+        title SXK Problemlösning
     body 
-        nav class="navbar"
-            a href="/" SXK BÅS
-        ==yield
+        header class="appbar"
+            div class="appbar-content"
+                nav class="appbar-nav"
+                    a [href="/" ]
+                        img src="/img/sxk-logo-w.png" alt="logo" class="appbar-logo"
+                    a [href="/problem"] Problem
+                    a href="/orsaker" Orsaker
+                    a href="/losningar" Lösningar
+
+                    - if session[:userinfo]
+                        -if session[:rights]["write"] == 1
+                            a href="/users" Användare
+                        a href="/logout" Logga ut
+                    - else 
+                        a href="/login" Logga in
+        div class="container"
+            ==yield

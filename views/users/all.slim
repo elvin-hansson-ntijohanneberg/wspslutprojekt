@@ -1,0 +1,25 @@
+table
+  thead 
+    tr 
+      th Namn 
+      th Email 
+      th Mobil 
+      th Nivå
+      - if rights["write"] == 1 or rights["remove"] == 1
+        th Åtgärd
+  tbody
+    - if users 
+      - users.each do |user|
+        tr 
+          td= user["name"]
+          td= user["email"]
+          td= user["phone"]
+          td= user["kategori"]
+          - if rights["write"] == 1 or rights["remove"] == 1
+            td  
+              a href="/users/#{user['uid']}/show"
+                i.fas.fa-pencil-alt
+            
+
+    
+    
