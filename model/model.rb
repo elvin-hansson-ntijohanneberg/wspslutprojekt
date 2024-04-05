@@ -39,7 +39,7 @@ def register_user(email, password, name, phone)
     #Lägg till användare
     password_digest = BCrypt::Password.create(password)
     
-    db.execute("INSERT INTO users (email, password, name, phone) VALUES (?,?,?,?)", [email, password_digest, name, phone])
+    db.execute("INSERT INTO users (email, password, name, phone, level_id) VALUES (?,?,?,?,?)", [email, password_digest, name, phone, 1])
     session[:email] = email
   end
 end
@@ -57,7 +57,7 @@ def users_show(uid)
   db.results_as_hash = true
   rights = get_rights(uid)
   if rights["read"] == 1
-    result = db.execute("SELECt uid, users.email, users.phone, users.name, levels.name as kategori FROM users INNER JOIN levels on users.level_id = levels.leid")
+    result = db.execute("SELECt uid, users.email, users.phone, users.name, levels.name as kategori FROM users INNER JOIN levels on users.level_id = levels.leid WHERE users.deleted = ?", [0])
     if result 
       return result
     else 
@@ -92,28 +92,23 @@ def user_show(uid, userid)
   end
 end
 
-def user_update(userid, userinfo)
+def user_update(uid, userid, name, email, phone, levelid)
   db = SQLite3::Database.new("model/db/sxk.db")
   db.results_as_hash = true
   rights = get_rights(uid) # kollar rights på aktiv användare
   if rights["write"] or rights["remove"]== 1
-    result = db.execute("UPDATE");
-    if result 
-      return result
-    else
-      return nil
-    end
+    db.execute("UPDATE users SET name = ?, email = ?, phone = ?, level_id = ? WHERE uid=?", [name, email, phone, levelid, userid])
   else
     return {"error" => "Inga läsrättigheter"}
   end
 end
 
-def user_destroy(userid)
+def user_destroy(uid, userid)
   db = SQLite3::Database.new("model/db/sxk.db")
   db.results_as_hash = true
   rights = get_rights(uid) # kollar rights på aktiv användare
   if rights["remove"]== 1
-    result = db.execute("DELETE ")
+    result = db.execute("UPDATE users SET deleted = ? WHERE uid = ?",[1, userid])
     if result 
       return result
     else

@@ -1,20 +1,20 @@
 form action="/users/#{user['uid']}/update" method="POST"
-  fieldset
-    label for="uname" Name
-    input type="text" id="uname" name="uname" value="#{user['name']}" placeholder="Ange namn"
-    label for="email" Email
-    input type="text" id="email" name="email" value="#{user['email']}" placeholder="Ange email"
-    label for="phone" Phone
-    input type="text" id="phone" name="phone" value="#{user['phone']}" placeholder="Ange telefon"
-    
-    label for="kategoriId" Behörighet
-    select id="kategoriId" name="kategorin"
-        - kategorier.each do |kategori|
-            - if kategori["leid"].to_i == user["kategoriId"].to_i
-                option value="#{kategori['leid']}" selected="selected" #{kategori["name"]}
-            - else 
-                option value="#{kategori['leid']}" = kategori["name"]
-    input class="button-update" type="submit" value="Spara"
-form action="/users/#{user['uid']}/delete" method="POST" 
-    div class="float-right"
-      input id="delete-button" type="submit" value="Ta bort"
+    fieldset
+        label for="uname" Name
+        input type="text" id="uname" name="uname" value="#{user['name']}" placeholder="Ange namn"
+        label for="email" Email
+        input type="text" id="email" name="email" value="#{user['email']}" placeholder="Ange email"
+        label for="phone" Phone
+        input type="text" id="phone" name="phone" value="#{user['phone']}" placeholder="Ange telefon"
+        
+        label for="kategoriId" Behörighet
+        select id="kategoriId" name="kategorin"
+            - kategorier.each do |kategori|
+                - if kategori["leid"].to_i == user["kategoriId"].to_i
+                    option value="#{kategori['leid']}" selected="selected" #{kategori["name"]}
+                - else 
+                    option value="#{kategori['leid']}" = kategori["name"]
+        input class="button-update" type="submit" value="Spara"
+        button onclick="confirmAction(event, 'Är du säker?', '/users/#{user['uid']}/delete')" Ta bort
+
+script src="/js/script.js"

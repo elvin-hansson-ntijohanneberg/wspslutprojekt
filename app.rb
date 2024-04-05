@@ -55,29 +55,21 @@ post("/users/new") do
 end
 
 get ("/problem") do
-  if check_login
-    #om användaren är inloggad
-    slim(:'problems/index')
-  else
-    slim("/login")
-  end
+  check_login()
+  #om användaren är inloggad
+  slim(:'problems/index')
 end
 
 get ("/orsaker") do
-  if check_login
-    slim(:'orsaker/index')
-  else
-    slim("/login")
-  end
+  check_login()
+  
+  slim(:'orsaker/index')
 end
 
 get ("/losningar") do
-  # check_login(id)
-  if check_login
-    slim(:'losningar/index')
-  else
-    slim("/login")
-  end
+  # check_login()
+  check_login()
+  slim(:'losningar/index')
 end
 
 get("/users") do 
@@ -100,11 +92,25 @@ get("/users/:id/show") do
 end
 
 post("/users/:id/update") do
+  check_login()
   p params
+  userid = params[:id].to_i
+  uid = session[:userinfo]["uid"]
+  name = params[:uname].strip
+  email = params[:email].strip
+  phone = params[:phone].strip
+  levelid = params[:kategorin]
+
+  user_update(uid, userid, name, email, phone, levelid)
+
   redirect('/users')
 end
 
-post("/users/:id/delete") do
+get("/users/:id/delete") do
   p params
+  userid = params[:id]
+  uid = session[:userinfo]["uid"]
+  user_destroy(uid, userid)
   redirect('/users')
 end
+
