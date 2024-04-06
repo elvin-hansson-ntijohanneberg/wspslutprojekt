@@ -39,4 +39,19 @@ html {
   text-decoration: underline;
 }
 
+.centreraT {
+    text-align: center;
+}
+
+/*    #boatbox {
+        border-color: #333;
+        border-width: 1px;
+        border-style: solid;
+    }
+*/
+
+#boatname {
+    margin: 0;
+}
+
 

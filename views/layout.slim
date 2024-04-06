@@ -26,5 +26,9 @@ html lang = "en"
                         a href="/logout" Logga ut
                     - else 
                         a href="/login" Logga in
+
+                - if session[:shipid] 
+                    p class="centreraT" id="boatname" = session[:shipname]
+                    
         div class="container"
             ==yield

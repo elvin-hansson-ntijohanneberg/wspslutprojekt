@@ -1,9 +1,29 @@
-h1 SXK - Problemlösning
-div 
-    - if user
-        / Visa saker för inloggade
-        h3 Välkommen tillbaka #{user["name"]}
-       
-    - else
-        /Visa saker om användaren inte är inloggad
-        h3 Välkommen!
+div class="row"
+    div class="column column-100" 
+        h1 SXK - Problemlösning 
+        - if user
+            / Visa saker för inloggade
+            h3 Välkommen tillbaka #{user["name"]}
+        
+        - else
+            /Visa saker om användaren inte är inloggad
+            h3 Välkommen!
+div id="boatbox"
+    div class="row"
+        div class="column column-100"
+            
+            h2 class="centreraT" Våra båtar 
+            p class="centreraT" Vi har tre båtar i vår arsenal. De är alla byggda av SXK och är av modellerna kutter och schooner <br> Välj en av båtarna 
+    div class="row"
+        div class="column column-33"
+            a href="/ship/1"
+                img src="img/atlantica.webp"
+                p class="centreraT" Atlantica
+        div class="column column-33"
+            a href="/ship/2"
+                img src="img/gratitude.jpeg"
+                p class="centreraT" Gratitude            
+        div class="column column-33"
+            a href="/ship/3"
+                img src="img/gratia.jpeg"
+                p class="centreraT" Gratia

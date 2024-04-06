@@ -6,10 +6,18 @@ require_relative "./controller/auth.rb"
 
 enable :sessions
 
+include Model
+
 get ("/") do
   userinfo = session[:userinfo]
 
   slim(:index, locals: {user: userinfo})
+end
+
+get ("/ship/:id") do
+  session[:shipid] = params[:id].to_i
+  session[:shipname] = get_ship(params[:id].to_i) 
+  redirect("/")
 end
 
 get ("/users/new") do
@@ -26,6 +34,8 @@ get ("/logout") do
   redirect("/")
 end
 
+# Rutt för inloggning
+# @see #login_user
 post("/users/login") do
   email = params[:email]
   password = params[:password]
