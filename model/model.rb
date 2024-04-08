@@ -10,11 +10,9 @@ module Model
   # @example get_ship(1) returnerar "Atlantica"
 
   def get_ship(sid)
-    p sid
     db = SQLite3::Database.new("model/db/sxk.db")
     db.results_as_hash = true
     result = db.execute("SELECT title FROM system_orsaker WHERE sid =? AND parent = ?", [sid, 0]).first
-    p result
     return result["title"]
   end
 
@@ -47,11 +45,18 @@ module Model
     end
   end
 
+  # Registrerar användare
+  # @param [string] email Användarens epostadress. Unik
+  # @param [string] password Användarens lösenord.
+  # @param [string] name Användarens namn.
+  # @param [string] phone Användarens telefon.
+  # @return []
+  # @example login_user('elvin@mindmatter.se', 'MittLösenord') returnerar {'uid' => 1, 'name' => 'Elvin', 'email' => 'elvin@mindmatter.se', 'phone' => '0708889694' }
+
   def register_user(email, password, name, phone)
     db = SQLite3::Database.new("model/db/sxk.db")
     db.results_as_hash = true
     result = db.execute("SELECT email FROM users WHERE email=?", email).first
-    p "Result: #{result}"
     if result != nil
       p "User already exists"
     else
@@ -59,7 +64,8 @@ module Model
       password_digest = BCrypt::Password.create(password)
 
       db.execute("INSERT INTO users (email, password, name, phone, level_id) VALUES (?,?,?,?,?)", [email, password_digest, name, phone, 1])
-      session[:email] = email
+
+      return session[:email] = email
     end
   end
 
@@ -136,5 +142,67 @@ module Model
     else
       return { "error" => "Inga läsrättigheter" }
     end
+  end
+
+  def get_orsaker(sid)
+    db = SQLite3::Database.new("model/db/sxk.db")
+    db.results_as_hash = true
+    result = db.execute("SELECT * FROM system_orsaker WHERE parent = ? ORDER BY title ASC", [sid])
+    return result
+  end
+
+  def get_orsak(sid)
+    db = SQLite3::Database.new("model/db/sxk.db")
+    db.results_as_hash = true
+    result = db.execute("SELECT * FROM system_orsaker WHERE sid = ?", [sid]).first
+    p result
+    return result
+  end
+
+  def orsak_new(parent, title, description)
+    db = SQLite3::Database.new("model/db/sxk.db")
+    db.results_as_hash = true
+    result = db.execute("INSERT INTO system_orsaker (parent, title, description) VALUES (?, ?, ?)", [parent, title, description])
+    return result
+  end
+
+  def orsak_update(sid, title, description)
+    db = SQLite3::Database.new("model/db/sxk.db")
+    db.results_as_hash = true
+    result = db.execute("UPDATE system_orsaker SET title = ?, description = ? WHERE sid = ?", [title, description, sid])
+    return result
+  end
+
+  def get_orsak_path(sid, path = [], db = nil)
+    db ||= SQLite3::Database.new("model/db/sxk.db")
+    db.results_as_hash = true
+    
+    result = db.execute("SELECT * system_orsaker WHERE sid = ?", [sid]).first
+    
+    # Lägg till aktuella posten i vår path. 
+    # Observera att vi här antar att du vill du ha en hash med nycklarna :sid och :rubrik
+
+    path.unshift({ sid: result["sid"], rubrik: result["title"]})
+    # Om parent är 0, är vi vi roten och kan returnera uppsamlade path.
+    if result["parent"] == 0
+      return path
+    else
+      # Annars, rekursivt kalla på funktionen med förälderns sid. 
+      get_system_path(result["parent"], path, db)
+  end
+
+  def get_problems(pid)
+    db = SQLite3::Database.new("model/db/sxk.db")
+    db.results_as_hash = true
+    result = db.execute("SELECT * FROM problem WHERE parent = ? ORDER BY title ASC", [pid])
+    return result
+  end
+
+  def get_problem(pid)
+    db = SQLite3::Database.new("model/db/sxk.db")
+    db.results_as_hash = true
+    result = db.execute("SELECT * FROM problem WHERE sid = ?", [pid]).first
+    p result
+    return result
   end
 end

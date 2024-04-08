@@ -16,19 +16,25 @@ html lang = "en"
                 nav class="appbar-nav"
                     a [href="/" ]
                         img src="/img/sxk-logo-w.png" alt="logo" class="appbar-logo"
-                    a [href="/problem"] Problem
-                    a href="/orsaker" Orsaker
-                    a href="/losningar" Lösningar
+                    a [href="/problems/search"] Felsök Problem
+                    
 
                     - if session[:userinfo]
                         -if session[:rights]["write"] == 1
+                            a href="/orsaker" Alla System
                             a href="/users" Användare
+                            a href="/losningar" Lösningar
+                            a href="/problems"   Problem
                         a href="/logout" Logga ut
                     - else 
                         a href="/login" Logga in
 
                 - if session[:shipid] 
-                    p class="centreraT" id="boatname" = session[:shipname]
-                    
+                    h3 class="centreraT" id="boatname" = session[:shipname]
         div class="container"
+            div class="row"
+                div class="column column-25 column-offset-25"
+                    - if flash[:notice]
+                        p.notice = flash[:notice]
             ==yield
+    script src="js/sript.js"

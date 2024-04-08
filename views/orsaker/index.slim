@@ -1,1 +1,44 @@
-h1 Orsaker
+div
+    h1 #{session[:shipname]}s System
+    h2 System och orsaker som leder till problem 
+hr 
+h3 Ändra #{current_system_name}
+form action="/orsaker/#{current_system}/update" method="POST"
+    table 
+        thead 
+            tr  
+                th width="25%" Namn 
+                th width="50%" Beskrivning 
+                th Åtgärd
+        tbody 
+            tr 
+                td 
+                    input type="text" width="25%" name="title" placeholder="Ange namn" required="required" value="#{current_system_name}"
+                td 
+                    textarea type="text" width="50%" name="description" placeholder="Ange beskrivning" required="required" value="#{current_system_description}"
+                td 
+                    input type="submit" value="Spara"
+
+h3 Nytt under #{current_system_name}
+form action="/orsaker/#{current_system}/new" method="POST"
+    table 
+        thead 
+            tr  
+                th width="25%" Namn 
+                th width="50%" Beskrivning 
+                th Åtgärd
+        tbody 
+            tr 
+                td 
+                    input type="text" width="25%" name="title" placeholder="Ange namn" required="required"
+                td 
+                    textarea type="text" width="50%" name="description" placeholder="Ange beskrivning" required="required"
+                td 
+                    input type="submit" value="Lägg till"
+h3 
+div 
+    h3 Orsaker under #{current_system_name}
+    ul class="orsakslista"
+        - orsaker.each do |orsak|
+            li 
+                a href="/orsaker/#{orsak["sid"]}/show" = orsak["title"]
