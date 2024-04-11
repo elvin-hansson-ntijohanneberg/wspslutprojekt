@@ -1,0 +1,90 @@
+h2 Uppdatera lösning
+h3 #{problem_system["o"].upcase} ger #{problem_system["p"].upcase}
+
+- if rights != nil && rights["write"]==1
+  .row
+    .column.column-50
+      form name="update" method="post" action="/losningar/#{problem_system['problemid']}/#{problem_system['systemid']}/update" enctype="multipart/form-data"
+        fieldset
+          label for="rubrik" Namn på lösning (kortfattat):
+          input type="text" id="title" name="title" placeholder="Namn på lösning" required="required" value="#{solution['title']}"
+          input type="hidden" name="psid" value="#{problem_system['psid']}"
+          input type="hidden" name="pid" value="#{problem_system['problemid']}"
+          input type="hidden" name="sid" value="#{problem_system['systemid']}"
+          label for="description" Beskrivning av lösning (markdown):
+          textarea id="description" name="description" rows="10" cols="50" placeholder="Ditt förslag på lösning" =solution['description']
+          p.preview_md == solution['description_md']
+          input type="submit" class="button" value="Spara"
+      label for="toggleMDCheckbox" Visa Markdown
+      input#toggleMDCheckbox type="checkbox" 
+      
+      div#toggleMDContent { display: none; }
+        h5 Markdown-kommandon för att skriva beskrivningen
+        table
+            thead
+                tr
+                th Kommando
+                th Förklaring
+            tbody
+                tr
+                    td == "# till ######"
+                    td == "Rubriker från &lt;h1&gt; till &lt;h6&gt;."
+                tr
+                    td == "*text* / _text_"
+                    td == "Kursiv text."
+                tr
+                    td == "**text** / __text__"
+                    td == "Fet text."
+                tr
+                    td == "-, *, +"
+                    td == "Onumrerade listor."
+                tr
+                    td =="1."
+                    td == "Numrerade listor."
+                tr
+                    td == "[Linktext](URL)"
+                    td == "Hyperlänk."
+                tr
+                    td == "![Alt-text](url)"
+                    td == "Bild."
+                tr
+                    td == ">"
+                    td == "Blockcitat."
+                tr
+                    td == "kod "
+                    td == "Inline kod."
+                tr
+                    td == "---"
+                    td == "Horisontell linje."        
+
+    .column.column-50
+      h5 Bifoga bild eller pdf
+      form name="update" method="post" action="/losningar/#{problem_system['problemid']}/#{problem_system['systemid']}/new_attachment" enctype="multipart/form-data"
+        fieldset
+          input type="hidden" name="psid" value="#{problem_system['psid']}"
+          label for="imgtitle" Bilagans titel (kortfattat): 
+          input type="text" id="imgtitle" name="imgtitle" placeholder="Bildtitel"
+          input#fileInput2 type="file" name="file" accept="application/pdf,image/png,image/jpeg,image/jpg" 
+          input type="submit" class="button" value="Spara"
+
+      div
+        h4 Bilagor (pdf & bilder)
+        .container_bilder
+          - unless attachments.nil?
+            .column
+              - attachments.each do |attachment|
+                h4 #{attachment["imgtitle"]}
+                - if attachment["file"].include?(".pdf")
+                  a href="#{attachment["file"]}" target="_blank" 
+                  embed type="#{attachment["type"]}" src="#{attachment["file"]}" style="min-width: 100px; max-width: 100px; min-height: 100px; max-height: 100px;"
+                  span
+                    a class="knapp" href="/losningar/#{problem_system['problemid']}/#{problem_system['systemid']}/#{attachment["aid"]}/delete" X
+                  p =attachment["description"]
+                - elsif attachment["file"].include?(".png") || attachment["file"].include?(".jpg") || attachment["file"].include?(".jpeg")
+                  a href="#{attachment["file"]}" target="_blank" 
+                  img src="#{attachment["file"]}" style="min-width: 100px; max-width: 100px; min-height: 100px; max-height: 100px;"
+                  span
+                    a class="knapp" href="/losningar/#{problem_system['problemid']}/#{problem_system['systemid']}/#{attachment["aid"]}/delete" X
+                  p =attachment["description"]
+
+script src="/js/script.js"

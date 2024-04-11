@@ -1,1 +1,89 @@
-h1 Lösningar
+-if solution
+    h2 #{problem_system["o"].upcase} ger #{problem_system["p"].upcase}
+    h3 #{solution["rubrik"]}
+    
+    div class="row"
+        div class="column column-50"
+            h4 Beskrivning
+            p class="md" ==solution["description_md"]
+            -if rights != nil && rights["write"]==1
+                a class="button button-primary" href="/losningar/#{problem_system['problemid']}/#{problem_system['systemid']}/edit" Ändra
+        div class="column column-50"
+            h4 Bifogade file (pdf & bilder)
+            div class="container_bilder"
+                - unless attachments.nil?
+                    div class="column"
+                    - attachments.each do |attachment|
+                        
+                        h4 #{attachment["imgtitle"]}
+                        - if attachment["file"].include?(".pdf")
+                            a href="#{attachment["file"]}" target="_blank" 
+                                embed type="#{attachment["type"]}" src="#{attachment["file"]}" style="min-width: 200px; max-width: 200px; min-height: 200px; max-height: 200px;"
+                                p =attachment["imgtitle"]
+                        - elsif attachment["file"].include?(".png") || attachment["file"].include?(".jpg") || attachment["file"].include?(".jpeg")
+                            a href="#{attachment["file"]}" target="_blank" 
+                                img src="#{attachment["file"]}" style="min-width: 200px; max-width: 200px; min-height: 200px; max-height: 200px;"
+                                p =attachment["imtitle"]
+-else
+  h2 Lägg till lösning
+  h3 #{problem_system["o"].upcase} ger #{problem_system["p"].upcase}
+
+  -if rights != nil && rights["write"]==1
+    form name="new" method="post" action="/losningar/#{problem_system['problemid']}/#{problem_system['systemid']}/new" enctype="multipart/form-data"
+        fieldset
+            label for="title" Namn på lösning (kortfattat):
+            input type="text" id="title" name="title" placeholder="Namn på lösning" required="required"
+            input type="hidden" name="psid" value="#{problem_system['psid']}"
+            input type="hidden" name="pid" value="#{problem_system['problemid']}"
+            input type="hidden" name="sid" value="#{problem_system['systemid']}"
+            label for="description" Beskrivning av lösning (markdown):
+            textarea id="description" name="description" rows="10" cols="50" placeholder="Ditt förslag på lösning"
+            h5 Bifoga bild eller pdf
+            label for="imgtitle" Bilagans titel (kortfattat): 
+            input type="text" id="imgtitle" name="imgtitle" placeholder="Bildtitel" required="required"
+            input#fileInput2 name="file" type="file" accept="application/pdf,image/png,image/jpeg,image/jpg"
+            input type="submit" class="btn" value="Spara"
+            div#previewContainer2
+    label for="toggleMDCheckbox" Visa Markdown-lathund
+    input#toggleMDCheckbox type="checkbox" 
+      
+    div#toggleMDContent { display: none; }
+        h5 Markdown-kommandon för att skriva beskrivningen
+        table
+            thead
+                tr
+                th Kommando
+                th Förklaring
+            tbody
+                tr
+                    td == "# till ######"
+                    td == "Rubriker från &lt;h1&gt; till &lt;h6&gt;."
+                tr
+                    td == "*text* / _text_"
+                    td == "Kursiv text."
+                tr
+                    td == "**text** / __text__"
+                    td == "Fet text."
+                tr
+                    td == "-, *, +"
+                    td == "Onumrerade listor."
+                tr
+                    td =="1."
+                    td == "Numrerade listor."
+                tr
+                    td == "[Linktext](URL)"
+                    td == "Hyperlänk."
+                tr
+                    td == "![Alt-text](url)"
+                    td == "Bild."
+                tr
+                    td == ">"
+                    td == "Blockcitat."
+                tr
+                    td == "kod "
+                    td == "Inline kod."
+                tr
+                    td == "---"
+                    td == "Horisontell linje."        
+
+script src="/js/script.js"

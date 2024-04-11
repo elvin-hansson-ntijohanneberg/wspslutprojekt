@@ -1,0 +1,19 @@
+h1 Relationer
+form action="/connections/update" method="post"
+  input type="submit" value="Spara"
+  table class="problemorsak"
+    tr
+        th PROBLEM
+        - orsaker.each do |orsak|
+            th class="rotated-text" #{orsak['title']}
+    - problems.each do |problem|
+      tr
+        td class="titel" #{problem['title'].upcase}
+        - orsaker.each do |orsak|
+          td
+            input type="hidden" name="relation[#{problem['pid']}][#{orsak['sid']}]" value="0"
+            - if connections.any? {|r| r['problemid'] == problem['pid'] && r['systemid'] == orsak['sid']}
+              input class="kryss" type="checkbox" name="relation[#{problem['pid']}][#{orsak['sid']}]" value="1" checked="checked"
+            - else
+              input class="kryss" type="checkbox" name="relation[#{problem['pid']}][#{orsak['sid']}]" value="1"
+

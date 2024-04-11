@@ -7,6 +7,7 @@ html lang = "en"
         link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css"
         link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css"
         link rel="stylesheet" href="/css/style.css"
+        link rel="icon" type="image/x-icon" href="images/favicon.png"
         script src="https://kit.fontawesome.com/b5fd20235e.js" crossorigin="anonymous"
 
         title SXK Problemlösning
@@ -16,14 +17,14 @@ html lang = "en"
                 nav class="appbar-nav"
                     a [href="/" ]
                         img src="/img/sxk-logo-w.png" alt="logo" class="appbar-logo"
-                    a [href="/problems/search"] Felsök Problem
+                    a [href="/problemsolving"] Felsök Problem
                     
 
                     - if session[:userinfo]
                         -if session[:rights]["write"] == 1
                             a href="/orsaker" Alla System
                             a href="/users" Användare
-                            a href="/losningar" Lösningar
+                            a href="/connections" Relationer
                             a href="/problems"   Problem
                         a href="/logout" Logga ut
                     - else 
@@ -31,10 +32,13 @@ html lang = "en"
 
                 - if session[:shipid] 
                     h3 class="centreraT" id="boatname" = session[:shipname]
+        
         div class="container"
             div class="row"
                 div class="column column-25 column-offset-25"
                     - if flash[:notice]
-                        p.notice = flash[:notice]
+                        p.flash.notice = flash[:notice]
+                    - if flash[:error]
+                        p.flash.error = flash[:error]
             ==yield
-    script src="js/sript.js"
+    script src="/js/script.js"

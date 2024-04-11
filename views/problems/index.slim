@@ -1,1 +1,51 @@
-h1 Alla Problem
+div
+    h2 #{session[:shipname]}s Symptom
+    h3 Symptom på att något är fel 
+hr 
+- path.each do |p|
+    a class="button blue-button button-outline path" href="/problems/#{p[:pid]}/show" #{p[:title].upcase}
+h4 Ändra #{current_problem_name}
+form action="/problem/#{current_problem}/update" method="POST"
+    table 
+        thead 
+            tr  
+                th width="25%" Namn 
+                th width="50%" Beskrivning 
+                th Åtgärd
+        tbody 
+            - if flash[:notice]
+                p.notice = flash[:notice]
+            tr 
+                td 
+                    input type="text" width="25%" name="title" placeholder="Ange namn" required="required" value="#{current_problem_name}"
+                td 
+                    textarea type="text" width="50%" name="description" placeholder="Ange beskrivning" required="required" #{current_problem_description}
+                td 
+                    input class="blue-button" type="submit" value="Spara"
+                    - if !chkchildren 
+                        span class="button button-outline" onclick="window.location.href='/problems/#{current_problem}/delete'" Radera
+-if path.length < 2
+    h4 Nytt under #{current_problem_name}
+    form action="/problems/#{current_problem}/new" method="POST"
+        table 
+            thead 
+                tr  
+                    th width="25%" Namn 
+                    th width="50%" Beskrivning 
+                    th Åtgärd
+            tbody 
+                tr 
+                    td 
+                        input type="text" width="25%" name="title" placeholder="Ange namn" required="required"
+                    td 
+                        textarea type="text" width="50%" name="description" placeholder="Ange beskrivning" required="required"
+                    td 
+                        input type="submit" value="Lägg till"
+    - if chkchildren
+        h4 Subsymptom
+        div 
+            h3 Symptom under #{current_problem_name}
+            ul class="orsakslista"
+                - problems.each do |problem|
+                    li 
+                        a href="/problems/#{problem["pid"]}/show" = problem["title"]

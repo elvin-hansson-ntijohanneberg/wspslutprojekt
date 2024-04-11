@@ -1,0 +1,18 @@
+h1 Felsök Problem
+div 
+    form action="/" method="post"
+        table class="problemorsak"
+            tr 
+                th class="problem" PROBLEM
+                - orsaker.each do |orsak|
+                    th class="rotated-text" #{orsak['title']} 
+            - problems.each do |problem|
+                tr
+                    td class="titel"  #{problem['title'].upcase}
+                    - orsaker.each do |orsak|
+                        - if connections.any? {|r| r['problemid'] == problem['pid'] && r['systemid'] == orsak['sid']}
+                            td class="paverkan" onclick="window.location.href='/losningar/#{problem['pid']}/#{orsak['sid']}'"
+                                input type="hidden" name="relation[#{problem['pid']}][#{orsak['sid']}]" value="0"
+                        
+                        - else 
+                            td class="ejpaverkan"

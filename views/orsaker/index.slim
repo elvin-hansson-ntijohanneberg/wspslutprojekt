@@ -1,44 +1,70 @@
 div
-    h1 #{session[:shipname]}s System
-    h2 System och orsaker som leder till problem 
+    h2 #{session[:shipname]}s System
+    h3 System och orsaker som leder till problem 
 hr 
-h3 Ändra #{current_system_name}
+- path.each do |p|
+    a class="button blue-button button-outline path" href="/orsaker/#{p[:sid]}/show" #{p[:title].upcase}
+h4 Ändra #{current_system_name}
 form action="/orsaker/#{current_system}/update" method="POST"
     table 
         thead 
             tr  
-                th width="25%" Namn 
-                th width="50%" Beskrivning 
+                th width="15%" Namn 
+                th width="40%" Beskrivning 
+                th width="15%" Delsystem 
                 th Åtgärd
         tbody 
+            - if flash[:notice]
+                p.notice = flash[:notice]
             tr 
                 td 
-                    input type="text" width="25%" name="title" placeholder="Ange namn" required="required" value="#{current_system_name}"
+                    - if current_system_delsystem > 0
+                        input type="text" width="15%" name="title" placeholder="Ange namn" required="required" value="#{current_system_name}"
+                    - else  
+                        p = current_system_name
                 td 
-                    textarea type="text" width="50%" name="description" placeholder="Ange beskrivning" required="required" value="#{current_system_description}"
+                    textarea type="text" width="40%" name="description" placeholder="Ange beskrivning" required="required" #{current_system_description}
                 td 
-                    input type="submit" value="Spara"
-
-h3 Nytt under #{current_system_name}
-form action="/orsaker/#{current_system}/new" method="POST"
-    table 
-        thead 
-            tr  
-                th width="25%" Namn 
-                th width="50%" Beskrivning 
-                th Åtgärd
-        tbody 
-            tr 
+                    - if current_system_delsystem > 0 
+                        select id="delsystem" name="delsystem"
+                            - delsystems.each do |delsystem|
+                                - if delsystem["did"].to_i == current_system_delsystem 
+                                    option value="#{delsystem["did"].to_i}" selected="selected" #{delsystem["title"]}
+                                - else
+                                    option value="#{delsystem["did"].to_i}" #{delsystem["title"]}
+                    - else 
+                        p Skuta
                 td 
-                    input type="text" width="25%" name="title" placeholder="Ange namn" required="required"
-                td 
-                    textarea type="text" width="50%" name="description" placeholder="Ange beskrivning" required="required"
-                td 
-                    input type="submit" value="Lägg till"
-h3 
-div 
-    h3 Orsaker under #{current_system_name}
-    ul class="orsakslista"
-        - orsaker.each do |orsak|
-            li 
-                a href="/orsaker/#{orsak["sid"]}/show" = orsak["title"]
+                    input class="blue-button" type="submit" value="Spara"
+                    - if !chkchildren && current_system_delsystem != 0
+                        span class="button button-outline" onclick="window.location.href='/orsaker/#{current_system}/delete'" Radera
+-if path.length < 2
+    h4 Nytt under #{current_system_name}
+    form action="/orsaker/#{current_system}/new" method="POST"
+        table 
+            thead 
+                tr  
+                    th width="15%" Namn 
+                    th width="40%" Beskrivning
+                    th width="15%" Delsystem 
+                    th Åtgärd
+            tbody 
+                tr 
+                    td 
+                        input type="text" width="15%" name="title" placeholder="Ange namn" required="required"
+                    td 
+                        textarea type="text" width="40%" name="description" placeholder="Ange beskrivning" required="required"
+                    td 
+                        select id="delsystem" name="delsystem"
+                            - delsystems.each do |delsystem|
+                                option value="#{delsystem["did"].to_i}" #{delsystem["title"]}
+                    td 
+                        input type="submit" value="Lägg till"
+    - if chkchildren
+        h4 Suborsaker
+        div 
+            h3 Orsaker under #{current_system_name}
+            ul class="orsakslista"
+                - orsaker.each do |orsak|
+                    li 
+                        a href="/orsaker/#{orsak["sid"]}/show" = orsak["title"]

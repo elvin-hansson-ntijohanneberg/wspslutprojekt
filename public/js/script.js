@@ -8,5 +8,24 @@ function confirmAction(event, prompt, url) {
 }
 
 setTimeout(function () {
-  document.querySelector(".notice").style.display = "none";
-}, 3000);
+  document.querySelector(".flash").style.display = "none";
+}, 2000);
+
+document.addEventListener("DOMContentLoaded", function() {
+  // Funktion för att toggla synlighet
+  function toggleVisibility() {
+    var checkbox = document.getElementById('toggleMDCheckbox');
+    var divToToggle = document.getElementById('MDContent');
+
+    // Kontrollerar om kryssrutan är ikryssad och ändrar om den syns eller inte
+    if(checkbox.checked) {
+      divToToggle.style.display = 'block';
+    } else {
+      divToToggle.style.display = 'none';
+    }
+  }
+
+  // Lägger till eventlyssnare för kryssrutan
+  document.getElementById('toggleMDCheckbox').addEventListener('change', toggleVisibility);
+});
+
