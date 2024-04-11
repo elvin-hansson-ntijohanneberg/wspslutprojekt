@@ -29,7 +29,7 @@ get ("/ship/:id") do
   check_login()
   session[:shipid] = params[:id].to_i
   session[:shipname] = get_ship(params[:id].to_i)
-  slim(:ship, locals: { shid: session[:shipid], shname: session[:shipname] })
+  redirect("/problemsolving")
 end
 
 get ("/users/new") do
